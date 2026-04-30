@@ -1,6 +1,7 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import cors from "cors";
-import loacationRouter from "./routes/location.routes.js";
+import routeRouter from "./routes/route.routes.js";
+import type { HealthCheckResponse } from "./types/healthCheck.types.js";
 
 const app = express();
 const PORT = 5000;
@@ -8,7 +9,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response<HealthCheckResponse>) => {
   res.json({
     status: "ok",
     message: "Hello from backend 👋",
@@ -16,8 +17,8 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/location", loacationRouter);
+app.use("/route", routeRouter);
 
 app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
+  console.log(`Сервер запущен на порту ${PORT} 🚀`);
 });
