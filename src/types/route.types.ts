@@ -13,13 +13,13 @@ export interface SendLocationResponse {
   received?: LatLng;
 }
 
+export type CalculateRouteRequest = {
+  start: LatLng;
+  end: LatLng;
+};
+
 export type CalculateRouteResponse = {
   status: Status;
   route?: Route;
   message?: string;
-};
-
-export type CalculateRouteRequest = {
-  start: LatLng;
-  end: LatLng;
 };

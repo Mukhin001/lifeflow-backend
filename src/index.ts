@@ -1,6 +1,7 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
 import routeRouter from "./routes/route.routes.js";
+import currencyRouter from "./routes/currency.routes.js";
 import type { HealthCheckResponse } from "./types/healthCheck.types.js";
 
 const app = express();
@@ -18,6 +19,8 @@ app.get("/", (req: Request, res: Response<HealthCheckResponse>) => {
 });
 
 app.use("/route", routeRouter);
+
+app.use("/currency", currencyRouter);
 
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT} 🚀`);
