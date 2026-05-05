@@ -8,3 +8,9 @@ export type CurrencyResponse =
       status: "error";
       message: string;
     };
+
+export interface ExternalApiResponse {
+  result: string;
+  base_code: string;
+  rates: Record<string, number>;
+}

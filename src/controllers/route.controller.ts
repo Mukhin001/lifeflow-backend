@@ -6,7 +6,7 @@ import type {
 } from "../types/route.types.js";
 
 export const calculateRoute = async (
-  req: Request<{}, CalculateRouteResponse, CalculateRouteRequest>,
+  req: Request<{}, {}, CalculateRouteRequest>,
   res: Response<CalculateRouteResponse>,
 ) => {
   const { start, end } = req.body;

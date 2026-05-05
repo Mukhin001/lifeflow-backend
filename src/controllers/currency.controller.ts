@@ -1,8 +1,11 @@
 import type { Request, Response } from "express";
-import type { CurrencyResponse } from "../types/currency.types.js";
+import type {
+  CurrencyResponse,
+  ExternalApiResponse,
+} from "../types/currency.types.js";
 
 export const getRates = async (
-  req: Request<{}, CurrencyResponse, {}, { base?: string }>,
+  req: Request<{}, {}, {}, { base?: string }>,
   res: Response<CurrencyResponse>,
 ) => {
   try {
@@ -10,14 +13,28 @@ export const getRates = async (
 
     const response = await fetch(`https://open.er-api.com/v6/latest/${base}`);
 
-    const data = await response.json();
-
-    if (data.result !== "success") {
+    if (!response.ok) {
       return res.status(500).json({
         status: "error",
-        message: "Ошибка внешнего API",
+        message: "Ошибка запроса к внешнему API",
       });
     }
+
+    const raw = await response.json();
+
+    if (
+      raw.result !== "success" ||
+      typeof raw.base_code !== "string" ||
+      typeof raw.rates !== "object" ||
+      !raw.rates
+    ) {
+      return res.status(500).json({
+        status: "error",
+        message: "Некорректный ответ API https://open.er-api.com",
+      });
+    }
+
+    const data: ExternalApiResponse = raw;
 
     return res.json({
       status: "ok",
