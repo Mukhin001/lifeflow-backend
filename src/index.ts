@@ -1,11 +1,18 @@
 import express, { type Request, type Response } from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+
+import { connectDB } from "./config/db.js";
+
 import routeRouter from "./routes/route.routes.js";
 import currencyRouter from "./routes/currency.routes.js";
+import taskRoutes from "./routes/task.routes.js";
 import type { HealthCheckResponse } from "./types/healthCheck.types.js";
 
+dotenv.config();
+
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +29,20 @@ app.use("/route", routeRouter);
 
 app.use("/currency", currencyRouter);
 
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT} 🚀`);
-});
+app.use("/tasks", taskRoutes);
+
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`Сервер запущен на порту ${PORT} 🚀`);
+    });
+  } catch (error) {
+    console.error(error);
+
+    process.exit(1);
+  }
+};
+
+startServer();
