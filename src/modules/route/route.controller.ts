@@ -3,7 +3,7 @@ import type {
   CalculateRouteRequest,
   CalculateRouteResponse,
   Route,
-} from "../types/route.types.js";
+} from "./route.types.js";
 
 export const calculateRoute = async (
   req: Request<{}, {}, CalculateRouteRequest>,

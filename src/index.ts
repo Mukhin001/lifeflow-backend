@@ -4,10 +4,11 @@ import dotenv from "dotenv";
 
 import { connectDB } from "./config/db.js";
 
-import routeRouter from "./routes/route.routes.js";
-import currencyRouter from "./routes/currency.routes.js";
-import taskRoutes from "./routes/task.routes.js";
+import routeRouter from "./modules/route/route.routes.js";
+import currencyRouter from "./modules/currency/currency.routes.js";
+import taskRoutes from "./modules/tasks/task.routes.js";
 import type { HealthCheckResponse } from "./types/healthCheck.types.js";
+import { checkDatabase } from "./middleware/checkDatabase.js";
 
 dotenv.config();
 
@@ -29,20 +30,19 @@ app.use("/route", routeRouter);
 
 app.use("/currency", currencyRouter);
 
-app.use("/tasks", taskRoutes);
+app.use("/tasks", checkDatabase, taskRoutes);
 
 const startServer = async () => {
   try {
     await connectDB();
-
-    app.listen(PORT, () => {
-      console.log(`Сервер запущен на порту ${PORT} 🚀`);
-    });
+    console.log("MongoDB подключена");
   } catch (error) {
-    console.error(error);
-
-    process.exit(1);
+    console.error("MongoDB не подключена", error);
   }
+
+  app.listen(PORT, () => {
+    console.log(`Сервер запущен на порту ${PORT} 🚀`);
+  });
 };
 
 startServer();

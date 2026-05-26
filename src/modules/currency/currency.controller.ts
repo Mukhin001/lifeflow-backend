@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import type {
   CurrencyResponse,
   ExternalApiResponse,
-} from "../types/currency.types.js";
+} from "./currency.types.js";
 
 export const getRates = async (
   req: Request<{}, {}, {}, { base?: string }>,

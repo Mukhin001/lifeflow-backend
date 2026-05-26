@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import * as taskService from "../modules/tasks/task.service.js";
+import * as taskService from "./task.service.js";
 
 export const getTasks = async (req: Request, res: Response) => {
   try {
@@ -18,6 +18,18 @@ export const getTasks = async (req: Request, res: Response) => {
 export const createTask = async (req: Request, res: Response) => {
   try {
     const { title, description } = req.body;
+
+    if (!title?.trim()) {
+      return res.status(400).json({
+        message: "Title обязателен",
+      });
+    }
+
+    if (!description?.trim()) {
+      return res.status(400).json({
+        message: "Description обязателен",
+      });
+    }
 
     const task = await taskService.createTask(title, description);
 
