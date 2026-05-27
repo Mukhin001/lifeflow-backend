@@ -17,7 +17,7 @@ export const getTasks = async (req: Request, res: Response) => {
 
 export const createTask = async (req: Request, res: Response) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, dueDate } = req.body;
 
     if (!title?.trim()) {
       return res.status(400).json({
@@ -31,7 +31,7 @@ export const createTask = async (req: Request, res: Response) => {
       });
     }
 
-    const task = await taskService.createTask(title, description);
+    const task = await taskService.createTask(title, description, dueDate);
 
     res.status(201).json(task);
   } catch (error) {
@@ -60,6 +60,25 @@ export const deleteTask = async (
 
     res.status(500).json({
       message: "Ошибка удаления задачи",
+    });
+  }
+};
+
+export const updateTask = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
+  try {
+    const { id } = req.params;
+
+    const task = await taskService.updateTask(id, req.body);
+
+    res.json(task);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Ошибка обновления задачи",
     });
   }
 };

@@ -26,6 +26,10 @@ const taskSchema = new mongoose.Schema(
       default: "medium",
     },
 
+    dueDate: {
+      type: Date,
+    },
+
     // userId: {
     //   // type: mongoose.Schema.Types.ObjectId,
     //   type: String,

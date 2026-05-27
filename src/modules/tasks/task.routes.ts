@@ -4,11 +4,9 @@ import * as taskController from "./task.controller.js";
 const router = Router();
 
 router.get("/", taskController.getTasks);
-
 router.post("/", taskController.createTask);
-
 router.delete("/:id", taskController.deleteTask);
-
+router.patch("/:id", taskController.updateTask);
 router.patch("/:id/status", taskController.updateTaskStatus);
 
 export default router;
