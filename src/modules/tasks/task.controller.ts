@@ -82,24 +82,3 @@ export const updateTask = async (
     });
   }
 };
-
-export const updateTaskStatus = async (
-  req: Request<{ id: string }>,
-  res: Response,
-) => {
-  try {
-    const { id } = req.params;
-
-    const { status } = req.body;
-
-    const task = await taskService.updateTaskStatus(id, status);
-
-    res.json(task);
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      message: "Ошибка обновления статуса",
-    });
-  }
-};

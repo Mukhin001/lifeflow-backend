@@ -29,7 +29,3 @@ export const updateTask = async (id: string, data: Partial<TaskData>) => {
     new: true,
   });
 };
-
-export const updateTaskStatus = async (id: string, status: string) => {
-  return Task.findByIdAndUpdate(id, { status }, { new: true });
-};
