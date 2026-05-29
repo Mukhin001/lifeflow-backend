@@ -26,6 +26,6 @@ export const deleteTask = async (id: string) => {
 
 export const updateTask = async (id: string, data: Partial<TaskData>) => {
   return Task.findByIdAndUpdate(id, data, {
-    new: true,
+    returnDocument: "after",
   });
 };
