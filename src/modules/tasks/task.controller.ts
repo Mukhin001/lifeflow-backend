@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as taskService from "./task.service.js";
+import mongoose from "mongoose";
 
 export const getTasks = async (req: Request, res: Response) => {
   try {
@@ -21,13 +22,19 @@ export const createTask = async (req: Request, res: Response) => {
 
     if (!title?.trim()) {
       return res.status(400).json({
-        message: "Title обязателен",
+        message: "Название обязателено",
       });
     }
 
     if (!description?.trim()) {
       return res.status(400).json({
-        message: "Description обязателен",
+        message: "Описание обязателено",
+      });
+    }
+
+    if (dueDate && Number.isNaN(Date.parse(dueDate))) {
+      return res.status(400).json({
+        message: "Некорректная дата",
       });
     }
 
@@ -50,7 +57,19 @@ export const deleteTask = async (
   try {
     const { id } = req.params;
 
-    await taskService.deleteTask(id);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Некорректный id",
+      });
+    }
+
+    const task = await taskService.deleteTask(id);
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Задача не найдена",
+      });
+    }
 
     res.json({
       message: "Задача удалена",
@@ -69,9 +88,34 @@ export const updateTask = async (
   res: Response,
 ) => {
   try {
+    const { title, description } = req.body;
     const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        message: "Некорректный id",
+      });
+    }
+
+    if (title !== undefined && !title.trim()) {
+      return res.status(400).json({
+        message: "Название обязателено",
+      });
+    }
+
+    if (description !== undefined && !description.trim()) {
+      return res.status(400).json({
+        message: "Описание обязателено",
+      });
+    }
+
     const task = await taskService.updateTask(id, req.body);
+
+    if (!task) {
+      return res.status(404).json({
+        message: "Задача не найдена",
+      });
+    }
 
     res.json(task);
   } catch (error) {
