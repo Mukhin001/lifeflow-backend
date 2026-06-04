@@ -13,8 +13,8 @@ export const createTask = async (
   dueDate: string,
 ) => {
   return Task.create({
-    title,
-    description,
+    title: title.trim(),
+    description: description.trim(),
     dueDate,
     // userId: "guest-user",
   });

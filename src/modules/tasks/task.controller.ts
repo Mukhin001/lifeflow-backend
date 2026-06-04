@@ -38,6 +38,12 @@ export const createTask = async (req: Request, res: Response) => {
       });
     }
 
+    if (title.length > 100) {
+      return res.status(400).json({
+        message: "Название слишком длинное",
+      });
+    }
+
     const task = await taskService.createTask(title, description, dueDate);
 
     res.status(201).json(task);
